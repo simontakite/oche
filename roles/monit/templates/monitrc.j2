@@ -186,7 +186,7 @@ check system $HOST
     if cpu usage (wait) > 80% for 2 cycles then alert
 
 # inteface 1 check
-check network public with interface eth0
+check network interface_eth0 with interface eth0
    if failed link then alert
    if changed link then alert
    if saturation > 90% then alert
@@ -194,12 +194,12 @@ check network public with interface eth0
    if total uploaded > 1 GB in last hour then alert
 
 # interface 2 check
-check network private with interface eth0
-   if failed link then alert
-   if changed link then alert
-   if saturation > 90% then alert
-   if download > 10 MB/s then alert
-   if total uploaded > 1 GB in last hour then alert
+#check network private with interface eth0
+#   if failed link then alert
+#   if changed link then alert
+#   if saturation > 90% then alert
+#   if download > 10 MB/s then alert
+#   if total uploaded > 1 GB in last hour then alert
 
 # ping master instance
 check host master_server with address 172.31.29.39
