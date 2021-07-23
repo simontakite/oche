@@ -3,7 +3,7 @@
 To run the setup, simply clone this repo: 
 
 ```sh
-git clone https://github.com/simontakite/oche-assignment
+git clone https://github.com/simontakite/oche-assignment.git
 ```
 
 Run the playbook
