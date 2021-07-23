@@ -39,9 +39,9 @@
 
 - name: clone new site 
   git:
-    repo: https://github.com/cxxr/example-website-repo.git
+    repo: https://github.com/simontakite/oche-site.git
     dest: /var/www/{{ domain }}
-    version: master
+    version: v1.0
     force: yes
   notify: restart nginx
 

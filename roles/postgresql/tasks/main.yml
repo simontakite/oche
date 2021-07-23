@@ -1,0 +1,19 @@
+---
+- name: install postgresql packages
+  package: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - postgresql
+    - postgresql-contrib
+
+- name: enable postgresql services
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: open postgresql port
+  ufw:
+    rule: allow
+    port: '{{ item }}'
+  with_items:
+    - '5432'

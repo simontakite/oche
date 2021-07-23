@@ -169,7 +169,7 @@ set httpd port 2812 and
 #
 #
 # root filesystem check
-check filesystem root with path /dev/sda1
+check filesystem root with path /dev/root
     if space usage > 80% then alert
     if inode usage > 30000 then alert
     if inode usage > 99% then stop
@@ -186,7 +186,7 @@ check system $HOST
     if cpu usage (wait) > 80% for 2 cycles then alert
 
 # inteface 1 check
-check network public with interface enp0s3
+check network public with interface eth0
    if failed link then alert
    if changed link then alert
    if saturation > 90% then alert
@@ -194,7 +194,7 @@ check network public with interface enp0s3
    if total uploaded > 1 GB in last hour then alert
 
 # interface 2 check
-check network private with interface enp0s8
+check network private with interface eth0
    if failed link then alert
    if changed link then alert
    if saturation > 90% then alert
@@ -202,7 +202,7 @@ check network private with interface enp0s8
    if total uploaded > 1 GB in last hour then alert
 
 # ping master instance
-check host master_server with address 192.168.10.10
+check host master_server with address 172.31.29.39
     if failed icmp type echo count 3 with timeout 3 seconds then alert
 
 # crontab checks
@@ -229,34 +229,6 @@ check process crond with pidfile /var/run/crond.pid
    if failed permission 1730 then unmonitor
    if failed uid root        then unmonitor
    if failed gid crontab     then unmonitor
-
-# syslog checks
- check process rsyslogd with pidfile /var/run/rsyslogd.pid
-   group system
-   group rsyslogd
-   start program = "/etc/init.d/rsyslog start"
-   stop  program = "/etc/init.d/rsyslog stop"
-   if 5 restarts with 5 cycles then timeout
-   depend on rsyslogd_bin
-   depend on rsyslogd_rc
-   depend on rsyslog_file
-
- check file rsyslogd_bin with path /usr/sbin/rsyslogd
-   group rsyslogd
-   include /etc/monit/templates/rootbin
-
- check file rsyslogd_rc with path "/etc/init.d/rsyslog"
-   group rsyslogd
-   include /etc/monit/templates/rootbin
-
- check file rsyslog_file with path /var/log/syslog
-   group rsyslogd
-   # Note: activate the immark plugin for rsyslog if
-   # your system is too low on events.
-   if timestamp > 65 minutes then alert
-   if failed permission 640  then unmonitor
-   if failed uid root        then unmonitor
-   if failed gid adm         then unmonitor
 
 # ntp check
 #

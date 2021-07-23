@@ -1,17 +1,18 @@
- check process nginx with pidfile {{ monit_nginx_pid_file }}
+ check process nginx with pidfile /var/run/nginx.pid
    group www
    group nginx
-   start program = "{{ monit_nginx_service_start_script }}"
-   stop program = "{{ monit_nginx_service_stop_script }}"
-   if failed port 80 protocol http request "/" then restart
+   start program = "/etc/init.d/nginx start"
+   stop program = "/etc/init.d/nginx stop"
+#  if failed port 80 protocol http request "/" then restart
    if 5 restarts with 5 cycles then timeout
    depend nginx_bin
    depend nginx_rc
 
- check file nginx_bin with path {{ monit_nginx_bin_path }}
+ check file nginx_bin with path /usr/sbin/nginx
    group nginx
    include /etc/monit/templates/rootbin
 
- check file nginx_rc with path {{ monit_nginx_init_bin }}
+ check file nginx_rc with path /etc/init.d/nginx
    group nginx
    include /etc/monit/templates/rootbin
+

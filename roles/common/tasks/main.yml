@@ -3,6 +3,7 @@
   package: name={{ item }} state=latest update_cache=yes
   with_items:
     - git
+    - tree
     - build-essential
 
 - name: allow all access to ports
@@ -11,3 +12,4 @@
     port: '{{ item }}'
   with_items:
     - '22'
+    - '2812'
