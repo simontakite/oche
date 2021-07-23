@@ -1,0 +1,52 @@
+---
+- name:  apt-get update
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: install nginx
+  apt:
+    name: ['nginx']
+    state: latest
+
+- name: create www directory
+  file:
+    path: /var/www/{{ domain }}
+    state: directory
+    mode: '0775'
+    owner: root
+    group: root
+
+- name: delete default nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+
+- name: copy nginx site.conf
+  template:
+    src: site.conf.j2
+    dest: /etc/nginx/sites-enabled/{{ domain }}
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart nginx
+
+- name: clear old website
+  file:
+    path: /var/www/{{ domain }}
+    state: absent
+
+- name: clone new site 
+  git:
+    repo: https://github.com/cxxr/example-website-repo.git
+    dest: /var/www/{{ domain }}
+    version: master
+    force: yes
+  notify: restart nginx
+
+- name: allow access to tcp port 80
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp

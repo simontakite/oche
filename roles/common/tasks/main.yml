@@ -1,0 +1,13 @@
+---
+- name: install essential packages
+  package: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - git
+    - build-essential
+
+- name: allow all access to ports
+  ufw:
+    rule: allow
+    port: '{{ item }}'
+  with_items:
+    - '22'

@@ -1,0 +1,47 @@
+---
+
+- name: install NTP, tzdata
+  become: yes
+  apt:
+    name: ['ntp', 'tzdata']
+    state: present
+
+- name: ensure NTP is running and enabled for SysV
+  become: yes
+  service:
+    enabled: yes
+    name: ntp
+    state: started
+  when: ansible_service_mgr != "systemd"
+
+  #- name:  ensure timedatectl ntp is off for SystemD
+  #become: yes
+  #command: timedatectl set-ntp off
+  #changed_when: no
+  #when: ansible_service_mgr == "systemd"
+
+  #- name: ensure NTP is running and enabled for SystemD
+  #become: yes
+  #systemd:
+  #  enabled: yes
+  #  name: ntp
+  #  state: started
+  #when: ansible_service_mgr == "systemd"
+
+- name: Set Timezone (xenial and above)
+  become: yes
+  file:
+    path: /etc/localtime
+    src: "/usr/share/zoneinfo/{{ ntp_timezone }}"
+    state: link
+  when: ansible_distribution_version is version('16.04', '>=')
+  notify:
+    - update timezone
+
+- name: Setup NTP
+  become: yes
+  template:
+    dest: /etc/ntp.conf
+    src: ntp.conf.j2
+  notify:
+    - restart ntp

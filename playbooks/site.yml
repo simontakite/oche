@@ -1,0 +1,13 @@
+---
+- hosts: all
+  roles:
+    - common
+    - ntp
+    - monit
+
+- hosts: masters
+  roles: []
+
+- hosts: clients
+  roles: 
+    - nginx

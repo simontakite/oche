@@ -1,0 +1,34 @@
+---
+- name: install monit
+  apt:
+    pkg: monit
+    update_cache: yes
+    cache_valid_time: 600
+  notify:
+    - restart monit
+
+- name: copy monit config files
+  copy:
+    src: "templates/{{ ansible_nodename }}/etc/monit/conf-enabled/"
+    dest: "/etc/monit/conf-enabled/"
+    mode: 0644
+  notify:
+    - restart monit
+    
+- name: copy monitrc configuration file
+  template:
+    src: "templates/monitrc.j2"
+    dest: "/etc/monit/monitrc"
+    mode: 0600
+  notify:
+    - restart monit
+
+- name: enable the Monit service
+  service:
+    name: monit
+    enabled: yes
+
+- name: allow all access to port 2812
+  ufw:
+    rule: allow
+    port: '2812'
