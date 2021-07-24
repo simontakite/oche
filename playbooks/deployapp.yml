@@ -1,0 +1,19 @@
+---
+- hosts: clients
+
+  tasks:
+    - name: clear old website
+      file:
+        path: /var/www/{{ domain }}
+        state: absent
+
+    - name: clone new site 
+      git:
+        repo: https://github.com/simontakite/oche-site.git
+        dest: /var/www/{{ domain }}
+        version: v1.0
+        force: yes
+      notify: restart nginx
+
+  roles:
+    - nginx
