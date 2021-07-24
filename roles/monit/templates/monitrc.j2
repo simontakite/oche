@@ -158,7 +158,7 @@ set alert sysadm@gmail.com                      # receive all alerts
 set httpd port 2812 and
 #     use address localhost  # only accept connection from localhost (drop if you use M/Monit)
 #    allow localhost        # allow localhost to connect to the server and
-    allow admin:monit      # require user 'admin' with password 'monit'
+    allow {{ monit_user }}:{{ monit_pass }}     # require user 'admin' with password 'monit'
 #     #with ssl {            # enable SSL/TLS and set path to server certificate
 #     #    pemfile: /etc/ssl/certs/monit.pem
 #     #}
