@@ -41,7 +41,7 @@
   git:
     repo: https://github.com/simontakite/oche-site.git
     dest: /var/www/{{ domain }}
-    version: v1.0
+    version: v1.1
     force: yes
   notify: restart nginx
 
